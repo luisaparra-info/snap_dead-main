@@ -86,7 +86,7 @@ if not success:
             sys.exit(1)
 
 
-mainWindow = tk.Tk(screenName="Camera Capture")
+mainWindow = tk.Tk()
 mainWindow.resizable(width=False, height=False)
 mainWindow.bind('<Escape>', lambda e: mainWindow.quit())
 lmain = tk.Label(mainWindow, compound=tk.CENTER, anchor=tk.CENTER, relief=tk.RAISED)
