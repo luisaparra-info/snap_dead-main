@@ -38,12 +38,21 @@ def seleccionarFiltro(seleccion):
     # Lectura de la imagen a incrustar en el video
     global filtro
     global variacion_alto
+    global variacion_x
+    global variacion_w
+
+    variacion_x=0
+    variacion_w=0
+
     print(seleccion)
     if (seleccion==0):
         filtro = cv2.imread('star.png',-1)
         variacion_alto=0
     elif (seleccion==1):
-        filtro = cv2.imread('pirate.png', -1)
+        filtro = cv2.imread('mae.png', -1)
+        variacion_alto=70
+        variacion_w=80
+        variacion_x=40
     elif (seleccion==2):
         filtro = cv2.imread('sunglass.png', -1)
         variacion_alto=130
@@ -63,10 +72,14 @@ def visualizar():
             faces = faceClassif.detectMultiScale(frame, 1.3, 5)
             
             for (x, y, w, h) in faces:
+                x=x - variacion_x
+                w=w+ variacion_w
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0),2)
                 # Redimensionar la imagen de entrada de acuerdo al ancho del
                 # rostro detectado
+                
                 resized_image = imutils.resize(filtro, width=w)
+                print(w)
                 filas_image = resized_image.shape[0]
                 col_image = w
 
@@ -74,7 +87,6 @@ def visualizar():
                 # redimensionada
                 porcion_alto = filas_image  // 4 + variacion_alto
                 
-                print(porcion_alto)
 
                 dif = 0
 
@@ -146,9 +158,11 @@ label1.grid(row=0, column=0, columnspan=3)
 
 mujeres = (
     "Margarita Salas",
-    "Hipatia de Alejandría",
-    "Marie Curie",
-    "Barbara McClintock"
+    "Mae Jemison",
+    "Rosalin",
+    "Lise Meitner",
+    "Barabara McClintock",
+    "Dozothy Czowfoot",
 )
 fuente = Font(family = "Roboto Cn", size = 14)
 style = ttk.Style() 
