@@ -7,6 +7,10 @@ from PIL import ImageTk
 import cv2
 import imutils
 import sys
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import smtplib
+
 fileName = "Web.txt"
 cancel = False
 
@@ -15,10 +19,10 @@ cancel = False
 def save(event = 0):
     global prevImg
 
-    if (len(sys.argv) < 2):
-        filepath = "imageCap.png"
+    if nombre.get():
+        filepath = nombre.get()+ ".png"
     else:
-        filepath = sys.argv[1]
+        filepath = "camptura.png"
 
     print ("Output file to: " + filepath)
     prevImg.save(filepath)
@@ -127,7 +131,7 @@ def finalizar():
 cap = None
 root = tk.Tk()
 root.title("Día Internacional de la Mujer y la Niña en la Ciencia - 1º BACH - CDyPC")
-root.geometry("640x720")
+root.geometry("640x770")
 
 
 image1 = Image.open("cabecera.jpg")
@@ -159,22 +163,39 @@ global listaMujeres
 
 faceClassif = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
+
+lblNombre=tk.Label(root,text="Nombre", background="#00a5a7", font=fuente, anchor=tk.E)
+lblNombre.grid(column=0, row=1, padx=10, pady=10)
+
+nombre = ttk.Entry(font=fuente)
+nombre.grid(column=1, row=1, columnspan=2, padx=10, pady=10)
+
+
+lblEmail=tk.Label(root,text="Email", background="#00a5a7", font=fuente)
+lblEmail.grid(column=0, row=2, padx=10, pady=10)
+
+email = ttk.Entry(font=fuente)
+email.grid(column=1, row=2, columnspan=2, padx=10, pady=10)
+
 listaMujeres = ttk.Combobox(root, values=mujeres, width=20, state="readonly",font=fuente, style="TCombobox")
 root.option_add('*TCombobox*Listbox.font', fuente)   # apply font to combobox list
 listaMujeres.set(mujeres[0])
-listaMujeres.grid(column=0,row=1,padx=5, pady=5)
+listaMujeres.grid(column=0,row=3,padx=5, pady=5)
 
 btnIniciar = ttk.Button(root, text="INICIAR", command=iniciar, style="C.TButton")
 
-btnIniciar.grid(column=1, row=1, padx=5, pady=5)
+btnIniciar.grid(column=1, row=3, padx=5, pady=5)
 
 btnFinalizar = ttk.Button(root, text="FINALIZAR", command=finalizar, style="C.TButton")
-btnFinalizar.grid(column=2, row=1, padx=10, pady=5)
+btnFinalizar.grid(column=2, row=3, padx=10, pady=5)
 
 lblVideo = tk.Label(root,height=500, background="#00a5a7")
-lblVideo.grid(column=0, row=2, columnspan=3)
+lblVideo.grid(column=0, row=4, columnspan=3)
 
-button = ttk.Button(root, text="SONRIE", command=save, style="C.TButton")
-button.grid(column=0, row=3, columnspan=3)
+
+button = ttk.Button(root, text="SONRIE :)", command=save, style="C.TButton")
+button.grid(column=0, row=5, columnspan=3)
+
+
 
 root.mainloop()
