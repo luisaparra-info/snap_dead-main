@@ -7,9 +7,11 @@ from PIL import ImageTk
 import cv2
 import imutils
 import sys
+import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import smtplib
+from email.mime.base import MIMEBase
+from email import encoders
 
 fileName = "Web.txt"
 cancel = False
@@ -27,6 +29,56 @@ def save(event = 0):
     print ("Output file to: " + filepath)
     prevImg.save(filepath)
    
+    # Iniciamos los parámetros del script
+    remitente = 'luisaparra.info@gmail.com'
+    destinatarios = email.get()
+    asunto = '[RPI] Correo de prueba'
+    cuerpo = 'Este es el contenido del mensaje'
+    ruta_adjunto = filepath
+    nombre_adjunto = filepath
+
+    # Creamos el objeto mensaje
+    mensaje = MIMEMultipart()
+    
+    # Establecemos los atributos del mensaje
+    mensaje['From'] = remitente
+    mensaje['To'] = destinatarios
+    mensaje['Subject'] = asunto
+    
+    # Agregamos el cuerpo del mensaje como objeto MIME de tipo texto
+    mensaje.attach(MIMEText(cuerpo, 'plain'))
+    
+    # Abrimos el archivo que vamos a adjuntar
+    archivo_adjunto = open(ruta_adjunto, 'rb')
+    
+    # Creamos un objeto MIME base
+    adjunto_MIME = MIMEBase('application', 'octet-stream')
+    # Y le cargamos el archivo adjunto
+    adjunto_MIME.set_payload((archivo_adjunto).read())
+    # Codificamos el objeto en BASE64
+    encoders.encode_base64(adjunto_MIME)
+    # Agregamos una cabecera al objeto
+    adjunto_MIME.add_header('Content-Disposition', "attachment; filename= %s" % nombre_adjunto)
+    # Y finalmente lo agregamos al mensaje
+    mensaje.attach(adjunto_MIME)
+    
+    # Creamos la conexión con el servidor
+    sesion_smtp = smtplib.SMTP('smtp.gmail.com', 587)
+    
+    # Ciframos la conexión
+    sesion_smtp.starttls()
+
+    # Iniciamos sesión en el servidor
+    sesion_smtp.login(remitente,'mdhkwczmqaexzwso')
+
+    # Convertimos el objeto mensaje a texto
+    texto = mensaje.as_string()
+
+    # Enviamos el mensaje
+    sesion_smtp.sendmail(remitente, destinatarios, texto)
+
+    # Cerramos la conexión
+    sesion_smtp.quit()
 
 def iniciar():
     global cap
@@ -46,8 +98,10 @@ def seleccionarFiltro(seleccion):
 
     print(seleccion)
     if (seleccion==0):
-        filtro = cv2.imread('star.png',-1)
-        variacion_alto=0
+        filtro = cv2.imread('marga.png',-1)
+        variacion_alto=110
+        variacion_w=70
+        variacion_x=10    
     elif (seleccion==1):
         filtro = cv2.imread('mae.png', -1)
         variacion_alto=70
@@ -143,7 +197,7 @@ def finalizar():
 cap = None
 root = tk.Tk()
 root.title("Día Internacional de la Mujer y la Niña en la Ciencia - 1º BACH - CDyPC")
-root.geometry("640x770")
+root.geometry("640x800")
 
 
 image1 = Image.open("cabecera.jpg")
