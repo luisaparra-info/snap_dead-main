@@ -28,15 +28,23 @@ def save(event = 0):
 
     print ("Output file to: " + filepath)
     prevImg.save(filepath)
-   
+
+
+    frases_mujeres = (
+        "Margarita Salas formó parte del primer equipo de trabajo que, en el Centro de Investigaciones Biológicas del CSIC de Madrid, introdujo un nuevo y poderoso ámbito de investigación: la biología molecular.",
+        "Mae Jemison fue la primera mujer afroamericana que viajó al espacio, el 12 de septiembre de 1992.",
+        "Barbara McClintock pasó a la historia por ser la primera mujer en recibir el Premio Nobel de Medicina",
+        "Lise Meitner fue una física austriaca, descubridora de la fisión nuclear, un logro por el que su compañero de laboratorio Otto Hahn recibió el premio Nobel en 1944.",
+        "Dozothy Czowfoot fue una química británica que identifico las estructuras tridimensionales de los cristales.",
+    )
     # Iniciamos los parámetros del script
     remitente = 'luisaparra.info@gmail.com'
     destinatarios = email.get()
-    asunto = '[RPI] Correo de prueba'
-    cuerpo = 'Este es el contenido del mensaje'
+    asunto = 'ICV-11F - Día de la mujer y la niña en la ciencia'
+    cuerpo = 'Hola '+ nombre.get()+ ". Has decidido ser "+listaMujeres.get()+". "+frases_mujeres[listaMujeres.current()]+" Un saludo y muchas gracias por participar. El equipo CDyPC - 1º Bachillerato" 
     ruta_adjunto = filepath
     nombre_adjunto = filepath
-
+    
     # Creamos el objeto mensaje
     mensaje = MIMEMultipart()
     
@@ -99,19 +107,24 @@ def seleccionarFiltro(seleccion):
     print(seleccion)
     if (seleccion==0):
         filtro = cv2.imread('marga.png',-1)
-        variacion_alto=110
-        variacion_w=70
-        variacion_x=10    
+        variacion_alto=70
+        variacion_w=80
+        variacion_x=20    
     elif (seleccion==1):
         filtro = cv2.imread('mae.png', -1)
         variacion_alto=70
         variacion_w=80
         variacion_x=40
     elif (seleccion==2):
-        filtro = cv2.imread('sunglass.png', -1)
-        variacion_alto=130
+        filtro = cv2.imread('barbara.png', -1)
+        variacion_alto=70
+        variacion_w=70
+        variacion_x=30
     elif (seleccion==3):
-        filtro = cv2.imread('cool.png', -1)
+        filtro = cv2.imread('lise.png', -1)
+        variacion_alto=75
+    elif (seleccion==4):
+        filtro = cv2.imread('dorothy.png', -1)
         variacion_alto=75
 def visualizar():
     global filtro
@@ -128,7 +141,7 @@ def visualizar():
             for (x, y, w, h) in faces:
                 x=x - variacion_x
                 w=w+ variacion_w
-                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0),2)
+                #cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0),2)
                 # Redimensionar la imagen de entrada de acuerdo al ancho del
                 # rostro detectado
                 
@@ -186,7 +199,7 @@ def visualizar():
 
             lblVideo.configure(image=img)
             lblVideo.image = img
-            lblVideo.after(1, visualizar)
+            lblVideo.after(10, visualizar)
         else:
             lblVideo.image = ""
             cap.release()
@@ -213,9 +226,8 @@ label1.grid(row=0, column=0, columnspan=3)
 mujeres = (
     "Margarita Salas",
     "Mae Jemison",
-    "Rosalin",
-    "Lise Meitner",
     "Barabara McClintock",
+    "Lise Meitner",
     "Dozothy Czowfoot",
 )
 fuente = Font(family = "Roboto Cn", size = 14)
